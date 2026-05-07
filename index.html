@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Relocate.HOME — Find Your Style</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F7F4F0;min-height:100vh;display:flex;justify-content:center;color:#2C2C2A}
+.app{width:100%;max-width:700px;padding:1.5rem 1rem 4rem}
+.logo{font-size:11px;font-weight:700;letter-spacing:3px;color:#E8A89C;margin-bottom:1.5rem;text-align:center}
+.prog-wrap{height:1px;background:#E0D8CF;margin-bottom:2rem;overflow:hidden}
+.prog{height:100%;background:#C8906A;transition:width .5s ease}
+.screen{display:none}.screen.on{display:block}
+.card{background:#fff;border:1px solid #E8E0D8;border-radius:4px;padding:2rem 1.8rem;margin-bottom:1rem}
+.qnum{font-size:9px;color:#C8906A;font-weight:400;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.qtxt{font-size:20px;font-weight:300;color:#1A1A18;margin-bottom:1.4rem;line-height:1.4;letter-spacing:-.2px}
+.opts{display:grid;gap:8px;margin-bottom:1.2rem}
+.opt{padding:12px 16px;border-radius:3px;border:1px solid #E0D8CF;background:#fff;color:#2C2C2A;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s;line-height:1.4;letter-spacing:.1px}
+.opt:hover,.opt.on{border-color:#C8906A;background:#FBF7F4;color:#2C2C2A}
+.opt.on{font-weight:500;border-width:1.5px}
+.oi{font-size:17px;width:22px;text-align:center;flex-shrink:0}
+.nav{display:flex;justify-content:space-between;align-items:center}
+.btn{padding:10px 24px;border-radius:3px;font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border:1px solid #2C2C2A;background:#fff;color:#2C2C2A;font-family:inherit;transition:all .15s}
+.btn:hover{background:#2C2C2A;color:#fff}
+.btn.p{background:#2C2C2A;border-color:#2C2C2A;color:#fff}
+.btn.p:hover{background:#444}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* GALLERY */
+.phase-dots{display:flex;justify-content:center;gap:7px;margin-bottom:14px}
+.pdot{width:18px;height:2px;border-radius:1px;background:#E0D8CF;transition:all .3s}
+.pdot.done{background:#C8906A}.pdot.active{background:#2C2C2A;width:28px}
+.gal-header{margin-bottom:12px}
+.gal-title{font-size:18px;font-weight:300;color:#1A1A18;margin-bottom:4px;letter-spacing:-.1px}
+.gal-sub{font-size:11px;color:#A89E94;margin-bottom:6px;letter-spacing:.3px}
+.gal-hint{font-size:12px;color:#B5A89E;margin-bottom:8px}
+.sel-count{font-size:13px;color:#E8A89C;font-weight:600;min-height:18px;margin-bottom:10px;text-align:center}
+.gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.gc{border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .18s;position:relative;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.gc img{width:100%;aspect-ratio:3/2;object-fit:contain;display:block;background:#fff;padding:6px}
+.gc.on{border-color:#2C2C2A;box-shadow:0 2px 12px rgba(0,0,0,.13)}
+.gc-check{position:absolute;top:7px;right:7px;width:20px;height:20px;border-radius:4px;background:#2C2C2A;color:#fff;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center}
+.gc.on .gc-check{display:flex}
+.gal-nav{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.skip-btn{font-size:10px;color:#A89E94;cursor:pointer;text-decoration:none;background:none;border:none;font-family:inherit;padding:0;letter-spacing:2px;text-transform:uppercase}
+
+/* CONTACT */
+.contact-inner{max-width:460px;margin:0 auto;text-align:center;padding:1rem 0}
+.contact-inner h2{font-size:22px;font-weight:500;color:#2C2C2A;margin-bottom:6px}
+.csub{font-size:14px;color:#9E8E82;margin-bottom:4px;line-height:1.5}
+.no-spam{font-size:12px;color:#B5A89E;margin-bottom:1.2rem}
+.no-spam span{color:#E8A89C;font-weight:500}
+.blur-preview{width:100%;height:130px;border-radius:12px;overflow:hidden;position:relative;margin-bottom:1.4rem}
+.blur-preview img{width:100%;height:100%;object-fit:cover;filter:blur(10px);transform:scale(1.15)}
+.blur-preview::after{content:"Your style is ready!";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#fff;background:rgba(0,0,0,.3)}
+.fi{width:100%;padding:11px 14px;border-radius:10px;border:1px solid #EDE5DC;background:#fff;color:#2C2C2A;font-size:14px;outline:none;margin-bottom:9px;font-family:inherit;text-align:left}
+.fi:focus{border-color:#E8A89C}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.fr .fi{margin-bottom:0}
+.reveal-btn{width:100%;background:#E8A89C;color:#5C2D20;border:none;padding:14px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit}
+.reveal-btn:hover{background:#df9a8c}
+.reveal-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* RESULT */
+.result-card{background:#fff;border-radius:4px;overflow:hidden;border:1px solid #E8E0D8;margin-bottom:16px}
+.res-hero{background:#fff;padding:2rem 1.6rem 1.4rem;border-bottom:1px solid #E8E0D8}
+.res-tag{font-size:9px;font-weight:400;letter-spacing:4px;color:#C8906A;margin-bottom:12px;display:block;text-transform:uppercase}
+.res-name{font-size:28px;font-weight:200;color:#1A1A18;margin-bottom:8px;line-height:1.2;letter-spacing:-0.5px}
+.res-name strong{font-weight:600}
+.res-desc{font-size:12px;color:#A89E94;line-height:1.6;margin-bottom:1.2rem;letter-spacing:.2px}
+.res-space-img{width:100%;max-height:340px;object-fit:contain;display:block;background:#F7F4F0;margin-top:14px;padding:10px 0}
+.res-body{padding:1.4rem}
+.res-hi{display:none}
+.res-long{font-size:13px;color:#3C3C3A;line-height:1.8;margin-bottom:1.4rem;padding:1.2rem 0;border-top:1px solid #E8E0D8;border-bottom:1px solid #E8E0D8}
+.action-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-bottom:1.4rem}
+@media(max-width:480px){.action-row{grid-template-columns:1fr 1fr;gap:5px}}
+.action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:11px 6px;border-radius:3px;border:1px solid #2C2C2A;background:#fff;color:#2C2C2A;font-size:9px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .2s;line-height:1.2}
+.action-btn:hover{background:#2C2C2A;color:#fff}
+.action-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.action-btn.wa{border-color:#25D366;color:#1a8a44}
+.action-btn.wa:hover{background:#25D366;color:#fff}
+.social-row{display:flex;gap:8px;margin-bottom:1rem}
+.social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FAF8F6;border:1px solid #EDE5DC;border-radius:8px;padding:9px;font-size:12px;font-weight:500;color:#2C2C2A;text-decoration:none}
+.social-btn:hover{border-color:#E8A89C;color:#7A3020}
+.stitle{font-size:9px;font-weight:400;letter-spacing:3px;color:#A89E94;margin-bottom:12px;margin-top:1.8rem;text-transform:uppercase;display:flex;align-items:center;gap:12px}.stitle::after{content:"";flex:1;height:1px;background:#E8E0D8}
+.vendors{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:.5rem}
+.vendor{background:#FAF8F6;border:1px solid #EDE5DC;border-radius:8px;padding:7px 12px;font-size:13px;color:#2C2C2A;font-weight:500;text-decoration:none;display:inline-block;transition:all .15s}
+.vendor:hover{border-color:#E8A89C;color:#7A3020}
+.timeline{display:flex;flex-direction:column;gap:0;margin-bottom:.5rem}
+.tl-item{display:grid;grid-template-columns:56px 1fr;gap:0 16px;margin-bottom:20px;position:relative}
+.tl-item:not(:last-child)::before{content:"";position:absolute;left:27px;top:58px;width:1.5px;bottom:-20px;background:linear-gradient(to bottom,#C8906A 0%,#E8E0D8 100%)}
+.tl-icon-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.tl-icon-box{width:54px;height:54px;border:1.5px solid #2C2C2A;border-radius:3px;display:flex;align-items:center;justify-content:center;background:#fff;flex-shrink:0}
+.tl-icon-box svg{width:28px;height:28px}
+.tl-arrow-down{display:none}
+.tl-content{padding-top:6px}
+.tl-step-num{font-size:9px;font-weight:400;letter-spacing:3px;color:#C8906A;text-transform:uppercase;margin-bottom:4px}
+.tl-label{font-size:13px;font-weight:500;color:#1A1A18;margin-bottom:6px;line-height:1.3}
+.tl-card{background:transparent;border-radius:0;padding:0;border:none}
+.tl-i{font-size:12px;color:#6C6460;line-height:1.65;display:flex;gap:8px;align-items:flex-start;margin-bottom:3px}
+.tl-i-dot{width:3px;height:3px;border-radius:4px;background:#C8906A;flex-shrink:0;margin-top:8px}
+.retry-btn{width:100%;background:transparent;color:#A89E94;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:12px;border-radius:3px;border:1px solid #E0D8CF;cursor:pointer;font-family:inherit;margin-top:8px}
+.retry-btn:hover{background:#FAF8F6}
+.share-note{text-align:center;font-size:11px;color:#B5A89E;margin-top:10px}
+
+@media(max-width:500px){
+  .gal-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .gc img{aspect-ratio:3/2}
+  .cta-row{grid-template-columns:1fr 1fr}
+  .res-name{font-size:24px}
+}
+
+.wa-float{position:fixed;bottom:24px;right:24px;background:#25D366;color:#fff;display:flex;align-items:center;gap:8px;padding:11px 18px;border-radius:3px;font-size:10px;font-weight:400;letter-spacing:2px;text-transform:uppercase;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.35);z-index:999;transition:all .2s}
+.wa-float:hover{background:#1ebe5d}
+</style>
+</head>
+<body>
+<div class="app">
+<div style="text-align:center;margin-bottom:2rem;padding-top:.5rem">
+  <div style="font-size:11px;font-weight:400;letter-spacing:5px;color:#2C2C2A;text-transform:uppercase;margin-bottom:3px">RELOCATE<span style="color:#C8906A">.</span>HOME</div>
+  <div style="width:30px;height:1px;background:#C8906A;margin:6px auto 0"></div>
+</div>
+<div class="prog-wrap"><div class="prog" id="prog" style="width:5%"></div></div>
+
+<!-- Q1 -->
+<div class="screen on" id="s1"><div class="card">
+<div class="qnum">1 OF 7</div><div class="qtxt">Where is your new home?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,1,'Manhattan NYC')"><span class="oi">&#127925;</span>Manhattan, NYC</div>
+<div class="opt" onclick="pick(this,1,'Brooklyn Queens')"><span class="oi">&#127751;</span>Brooklyn / Queens</div>
+<div class="opt" onclick="pick(this,1,'Hoboken NJ')"><span class="oi">&#127807;</span>Hoboken / New Jersey</div>
+<div class="opt" onclick="pick(this,1,'Bergen County NJ')"><span class="oi">&#127968;</span>Bergen County, NJ</div>
+<div class="opt" onclick="pick(this,1,'Still exploring options')"><span class="oi">&#128205;</span>Still exploring options</div>
+</div>
+<div class="nav"><div></div><button class="btn p" id="n1" onclick="go(1,2)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q2 -->
+<div class="screen" id="s2"><div class="card">
+<div class="qnum">2 OF 7</div><div class="qtxt">When do you arrive?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,2,'Within 1 month')"><span class="oi">&#128293;</span>Within 1 month — let's move fast!</div>
+<div class="opt" onclick="pick(this,2,'1-3 months')"><span class="oi">&#128197;</span>1&#8211;3 months from now</div>
+<div class="opt" onclick="pick(this,2,'3-6 months')"><span class="oi">&#128199;</span>3&#8211;6 months from now</div>
+<div class="opt" onclick="pick(this,2,'Just planning')"><span class="oi">&#128161;</span>Just exploring for now</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(2,1)">&#8592; Back</button><button class="btn p" id="n2" onclick="go(2,3)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q3 -->
+<div class="screen" id="s3"><div class="card">
+<div class="qnum">3 OF 7</div><div class="qtxt">Who's moving in?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,3,'Just me — solo move')"><span class="oi">&#129523;</span>Just me — solo move</div>
+<div class="opt" onclick="pick(this,3,'Me and partner')"><span class="oi">&#128107;</span>Me & my partner</div>
+<div class="opt" onclick="pick(this,3,'Family with children')"><span class="oi">&#128106;</span>Family with children</div>
+<div class="opt" onclick="pick(this,3,'Family with baby')"><span class="oi">&#128118;</span>Family with a baby or toddler</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(3,2)">&#8592; Back</button><button class="btn p" id="n3" onclick="go(3,4)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q4 -->
+<div class="screen" id="s4"><div class="card">
+<div class="qnum">4 OF 7</div><div class="qtxt">What's your furniture investment?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,4,'10k')"><span class="oi">&#128176;</span>Up to $10,000</div>
+<div class="opt" onclick="pick(this,4,'20k')"><span class="oi">&#128178;</span>$10,000 &#8211; $20,000</div>
+<div class="opt" onclick="pick(this,4,'40k')"><span class="oi">&#128181;</span>$20,000 &#8211; $40,000</div>
+<div class="opt" onclick="pick(this,4,'40k+')"><span class="oi">&#10024;</span>$40,000+</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(4,3)">&#8592; Back</button><button class="btn p" id="n4" onclick="go(4,5)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q5 -->
+<div class="screen" id="s5"><div class="card">
+<div class="qnum">5 OF 7</div><div class="qtxt">What's most important to you?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,5,'Fast setup')"><span class="oi">&#9889;</span>Speed — I want to be set up fast</div>
+<div class="opt" onclick="pick(this,5,'Great design')"><span class="oi">&#127775;</span>Design — a home that feels curated</div>
+<div class="opt" onclick="pick(this,5,'Value')"><span class="oi">&#127919;</span>Value — smart choices within budget</div>
+<div class="opt" onclick="pick(this,5,'Kids friendly')"><span class="oi">&#129528;</span>Family-friendly & practical</div>
+<div class="opt" onclick="pick(this,5,'Full service')"><span class="oi">&#128081;</span>Full service — handle everything for me</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(5,4)">&#8592; Back</button><button class="btn p" id="n5" onclick="go(5,6)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q6 -->
+<div class="screen" id="s6"><div class="card">
+<div class="qnum">6 OF 7</div><div class="qtxt">What size is your apartment?</div>
+<div class="opts">
+<div class="opt" onclick="pick(this,6,'studio')"><span class="oi">&#127968;</span>Studio</div>
+<div class="opt" onclick="pick(this,6,'1br')"><span class="oi">&#127968;</span>1 Bedroom</div>
+<div class="opt" onclick="pick(this,6,'2br')"><span class="oi">&#127968;</span>2 Bedrooms</div>
+<div class="opt" onclick="pick(this,6,'3br')"><span class="oi">&#127968;</span>3 Bedrooms</div>
+<div class="opt" onclick="pick(this,6,'4br+')"><span class="oi">&#127968;</span>4+ Bedrooms</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(6,5)">&#8592; Back</button><button class="btn p" id="n6" onclick="go(6,7)" disabled>Next &#8594;</button></div>
+</div></div>
+
+<!-- Q7 -->
+<div class="screen" id="s7"><div class="card">
+<div class="qnum">7 OF 7</div><div class="qtxt">Which rooms are you furnishing?</div>
+<div class="opts" id="q7opts">
+<div class="opt multi" onclick="toggleMulti(this,'living')"><span class="oi">&#128138;</span>Living Room</div>
+<div class="opt multi" onclick="toggleMulti(this,'dining')"><span class="oi">&#127860;</span>Dining Room</div>
+<div class="opt multi" onclick="toggleMulti(this,'bedroom')"><span class="oi">&#128716;</span>Master Bedroom</div>
+<div class="opt multi" onclick="toggleMulti(this,'kids')"><span class="oi">&#129381;</span>Kids Room(s)</div>
+<div class="opt multi" onclick="toggleMulti(this,'office')"><span class="oi">&#128187;</span>Home Office</div>
+<div class="opt multi" onclick="toggleMulti(this,'nursery')"><span class="oi">&#128118;</span>Nursery / Baby Room</div>
+</div>
+<div class="nav"><button class="btn" onclick="go(7,6)">&#8592; Back</button><button class="btn p" id="n7" onclick="startGallery()" disabled>See my styles &#8594;</button></div>
+</div></div>
+
+<!-- GALLERY -->
+<div class="screen" id="sgallery">
+<div class="phase-dots" id="phaseDots"></div>
+<div class="card">
+  <div class="gal-header">
+    <div class="gal-title" id="galTitle"></div>
+    <div class="gal-sub" id="galSub"></div>
+    <div class="gal-hint">Tap all that you love &#8212; pick as many as you like</div>
+  </div>
+  <div class="sel-count" id="selCount"></div>
+  <div class="gal-grid" id="galGrid"></div>
+  <div class="gal-nav">
+    <button class="skip-btn" onclick="nextPhase()">Skip →</button>
+    <button class="btn p" id="galNext" onclick="nextPhase()">Next room &#8594;</button>
+  </div>
+</div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="sresult">
+<div class="result-card">
+  <div class="res-hero">
+    <span class="res-tag">YOUR STYLE</span>
+    <div class="res-name" id="resName"></div>
+    <div class="res-desc" id="resDesc"></div>
+    <img id="resSpaceImg" class="res-space-img" src="" alt=""/>
+  </div>
+  <div class="res-body">
+    
+    <div class="res-long" id="resLong"></div>
+    <div class="action-row">
+      <a class="action-btn wa" id="waBtn" href="#" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        Contact us
+      </a>
+      <a class="action-btn" href="https://relocate-home.com" target="_blank">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Our website
+      </a>
+      <button class="action-btn" onclick="shareResult()">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share style
+      </button>
+      <button class="action-btn" onclick="retry()">
+        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        Retake quiz
+      </button>
+    </div>
+    <div class="stitle">ESTIMATED INVESTMENT</div><div id="budgetBlock" class="checklist" style="margin-bottom:1rem"></div><div class="stitle">SHOPS WE RECOMMEND</div>
+    <div class="vendors" id="vendorList"></div>
+    <!-- INSTAGRAM CAROUSEL -->
+<div style="margin:2rem 0 0">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+    <div style="font-size:9px;letter-spacing:3px;color:#A89E94;text-transform:uppercase">Selected Projects</div>
+    <a href="https://www.instagram.com/relocate_home/" target="_blank" style="font-size:9px;letter-spacing:1.5px;color:#2C2C2A;text-decoration:none;text-transform:uppercase;border-bottom:1px solid #2C2C2A;padding-bottom:1px">@relocate_home</a>
+  </div>
+  <p style="font-size:11px;color:#B5ACA4;margin-bottom:12px;letter-spacing:.2px;line-height:1.6">Homes we have designed and set up for families relocating to New York.</p>
+
+  <div style="position:relative;border-radius:4px;overflow:hidden">
+    <div id="igTrack" style="display:flex;transition:transform .48s cubic-bezier(.4,0,.2,1)">
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_001.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">New Jersey</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_002.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">Manhattan</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_003.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">Brooklyn</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_004.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">Manhattan</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_005.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">Manhattan</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_006.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">Manhattan</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/relocate_home/" target="_blank" rel="noopener" style="flex:0 0 100%;position:relative;display:block;cursor:pointer;text-decoration:none">
+          <div style="width:100%;height:260px;overflow:hidden">
+            <img src="images/img_007.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s ease" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;background:linear-gradient(transparent,rgba(0,0,0,.42))">
+            <div style="font-size:8px;color:rgba(255,255,255,.85);letter-spacing:2px;text-transform:uppercase">New Jersey</div>
+          </div>
+        </a>
+    </div>
+    <button onclick="igPrev()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;font-size:13px;color:#2C2C2A;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3">&#8592;</button>
+    <button onclick="igNext()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;font-size:13px;color:#2C2C2A;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3">&#8594;</button>
+  </div>
+
+  <div id="igDots" style="display:flex;justify-content:center;align-items:center;gap:6px;margin-top:10px">
+    <div class="igdot" style="width:20px;height:3px;border-radius:2px;background:#2C2C2A;transition:all .35s;cursor:pointer" onclick="igGoTo(0)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(1)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(2)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(3)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(4)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(5)"></div>
+    <div class="igdot" style="width:6px;height:3px;border-radius:2px;background:#D9D3CC;transition:all .35s;cursor:pointer" onclick="igGoTo(6)"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var cur=0,total=7,auto;
+  var track=document.getElementById('igTrack');
+  var dots=document.querySelectorAll('.igdot');
+  function go(n){
+    cur=(n+total)%total;
+    track.style.transform='translateX(-'+cur*100+'%)';
+    dots.forEach(function(d,i){
+      d.style.width=i===cur?'20px':'6px';
+      d.style.background=i===cur?'#2C2C2A':'#D9D3CC';
+    });
+  }
+  function startAuto(){auto=setInterval(function(){go(cur+1);},4200);}
+  function stopAuto(){clearInterval(auto);}
+  window.igNext=function(){stopAuto();go(cur+1);startAuto();};
+  window.igPrev=function(){stopAuto();go(cur-1);startAuto();};
+  window.igGoTo=function(n){stopAuto();go(n);startAuto();};
+  startAuto();
+})();
+</script>
+
+
+
+
+<button class="retry-btn" onclick="retry()">&#128260; Start over</button>
+<p class="share-note">Share your result and help a friend find their style!</p>
+<div style="margin-top:2rem;padding:1.2rem 1rem;border-top:1px solid #E8E0D8;text-align:center">
+  <p style="font-size:9px;color:#B5ACA4;letter-spacing:.5px;line-height:1.8;max-width:480px;margin:0 auto">
+    DISCLAIMER — This quiz is intended for inspiration and guidance only. Style results, budget estimates and timelines are approximate and personalised to your selections. Actual costs vary based on product availability, delivery schedules, apartment specifications and market conditions. Relocate.HOME is not responsible for any decisions made based solely on quiz results. For a precise quote and personalised plan, please book a free consultation with our team.<br><br>
+    &copy; 2025 Relocate.HOME &nbsp;|&nbsp; <a href="https://www.relocate-home.com" style="color:#C8906A;text-decoration:none">relocate-home.com</a>
+  </p>
+</div>
+</div>
+
+
+<a class="wa-float" id="waFloat" href="#" target="_blank">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Chat with us
+</a>
+<!-- /app -->
+
+<script>
+// ============================================================
+// STYLE DEFINITIONS
+// Add or edit styles here. Each style needs:
+//   key, name, desc, long_desc, vendors (array)
+// ============================================================
+var STYLES = {
+  "beachy": {
+    name: "Beachy",
+    desc: "Sun-bleached linen, rattan light, and the quiet of a late afternoon by the water.",
+    bullets: [
+      "Natural oak, washed linen, and sun-faded cotton  -  materials that feel at ease",
+      "A palette of dune, white, and pale blue that never competes with the light",
+      "Rattan and jute layered softly  -  texture without weight",
+      "Ceramics, botanicals, and one good basket  -  accessories that belong",
+      "Rooms that feel unhurried, like a weekend that never quite ended",
+      "Guests arrive, sink into the sofa, and do not want to leave"
+    ],
+    vendors: ["Serena & Lily","Pottery Barn","West Elm","Article","IKEA"]
+  },
+  "jaffa": {
+    name: "Jaffa Vibes",
+    desc: "Raw plaster, warm brass, and the layered soul of the Mediterranean.",
+    bullets: [
+      "Raw plaster walls in amber and clay  -  imperfect surfaces that feel entirely intentional",
+      "Walnut, aged velvet, and hand-hammered brass  -  materials with character and weight",
+      "Rugs in terracotta and indigo that look like they have a history",
+      "Shelves that read as a collection rather than a curation",
+      "Warm, layered light from artisan pendants and table lamps",
+      "A home that feels like it took years to assemble  -  because it did"
+    ],
+    vendors: ["World Market","Anthropologie","Arhaus","Crate & Barrel","Wayfair"]
+  },
+  "industrial": {
+    name: "Industrial",
+    desc: "Cognac leather, matte black steel, and rooms that feel both refined and uncompromising.",
+    bullets: [
+      "Cognac leather, blackened steel, and raw concrete  -  a palette that earns its calm",
+      "Furniture with clean geometric profiles and full-grain finishes that age well",
+      "One oversize arc lamp, one large photograph  -  nothing decorative without purpose",
+      "Textiles kept spare: a single wool throw, one linen cushion",
+      "A room that communicates confidence without needing to raise its voice",
+      "Everything chosen. Nothing extra."
+    ],
+    vendors: ["CB2","West Elm","Article","Restoration Hardware","Design Within Reach"]
+  },
+  "boho": {
+    name: "Boho",
+    desc: "Layered textiles, hand-knotted wool, and the particular warmth of a home that tells a story.",
+    bullets: [
+      "Boucle, mudcloth, and hand-knotted wool  -  textiles that reward touching",
+      "Warm neutrals moving through rust, camel, and olive without ever clashing",
+      "Rattan pendants, ceramic lamps, and candlelight layered into something soft",
+      "Open shelves with books, objects, and one thing picked up somewhere unexpected",
+      "Rooms that feel like they grew rather than were designed",
+      "The kind of home people feel immediately comfortable in"
+    ],
+    vendors: ["Anthropologie","World Market","Urban Outfitters","Arhaus","McGee & Co"]
+  },
+  "western": {
+    name: "Western",
+    desc: "Tanned leather, desert clay, and the quiet authority of handcrafted objects.",
+    bullets: [
+      "Saddle leather, raw-edge wood, and hand-thrown clay  -  materials from the land",
+      "A palette of terracotta, sand, and deep indigo drawn from the desert Southwest",
+      "One strong piece of wall art  -  a textile, a landscape, something vast and quiet",
+      "Tribal rugs that anchor the room without announcing themselves",
+      "Accessories chosen for how they were made, not how they photograph",
+      "Substance over surface, in every single choice"
+    ],
+    vendors: ["Pottery Barn","World Market","Arhaus","Burke Decor","Wayfair"]
+  },
+  "scandinavian": {
+    name: "Scandinavian",
+    desc: "White oak, soft boucle, and the particular clarity of a room with nothing unnecessary.",
+    bullets: [
+      "White oak, pale boucle, and ribbed ceramic  -  a quiet material palette",
+      "Sheer curtains left to move with the light across the afternoon floor",
+      "Furniture with considered proportions  -  nothing too much, nothing missing",
+      "Wool throws and candles that earn their warmth without trying",
+      "A single abstract print in a thin natural frame  -  art that does not demand attention",
+      "A home that always feels like a considered decision, never a compromise"
+    ],
+    vendors: ["IKEA","H&M Home","Hay","Muuto","Bolia","Normann Copenhagen"]
+  },
+  "minimalistic": {
+    name: "Minimalistic",
+    desc: "Poured concrete, fine linen, and rooms where silence has a texture.",
+    bullets: [
+      "Warm white, raw concrete, and greige  -  a palette where restraint is the design",
+      "One sculptural object. One artwork. A vase with a single branch.",
+      "Upholstery in tight-weave linen with clean, unbroken lines",
+      "Blackened steel and solid marble used as punctuation, not decoration",
+      "Light that is recessed, focused, and never accidental",
+      "Living here requires discipline. The reward is a home that never ages."
+    ],
+    vendors: ["Muji","CB2","Design Within Reach","Hay","West Elm"]
+  },
+  "bauhaus": {
+    name: "Bauhaus",
+    desc: "Primary color, tubular steel, and the pleasure of a room that takes design seriously.",
+    bullets: [
+      "Chrome tube frames, lacquered surfaces, and primary color used with precision",
+      "Mustard or cobalt as a single deliberate accent  -  never background, always intention",
+      "Tight upholstery, sharp profiles, no excess fabric or loose cushions",
+      "Graphic rugs that reference the movement's textile history",
+      "Poster art and architectural photography with strong compositional lines",
+      "Every object has been thought about. The room makes that clear."
+    ],
+    vendors: ["Design Within Reach","CB2","MoMA Design Store","Knoll","Herman Miller"]
+  },
+  "pop": {
+    name: "Pop Art",
+    desc: "Lacquer pink, chartreuse steel, and the confidence of color used without apology.",
+    bullets: [
+      "Dusty rose velvet, powder-coated yellow, and warm white  -  contrast as the point",
+      "Rounded silhouettes and tufted surfaces that feel almost sculptural",
+      "One oversized canvas that takes the full wall  -  art as the anchor",
+      "Colors chosen for personality, not coordination. It works because it means it.",
+      "Lighting that doubles as objects: mushroom lamps, colored pendants, warm bulbs",
+      "A room that belongs completely to the person who lives in it"
+    ],
+    vendors: ["Anthropologie","Z Gallerie","CB2","Urban Outfitters","Burke Decor"]
+  },
+  "midcentury": {
+    name: "Mid-Century",
+    desc: "Walnut veneer, angled legs, and the enduring elegance of design that never needed updating.",
+    bullets: [
+      "Walnut credenzas, angled legs, and tailored velvet in olive or burnt sienna",
+      "A brass arc lamp, a ceramic table lamp, a pendant that earns its drama",
+      "Abstract prints and graphic lithographs with strong compositional lines",
+      "A saturated palette that feels warm without ever being busy",
+      "Furniture that looks like it was made for exactly this room, in exactly this decade",
+      "Every corner chosen with genuine care for the discipline of the period"
+    ],
+    vendors: ["Article","West Elm","Design Within Reach","Crate & Barrel","CB2"]
+  },
+  "eclectic": {
+    name: "Eclectic",
+    desc: "Velvet against rattan, brass next to raw wood - a home assembled by someone who trusts their eye.",
+    bullets: [
+      "Velvet against rattan. Brass beside raw wood. The combinations work because the eye is confident.",
+      "A Moroccan rug, a Scandinavian lamp, a lacquered chest  -  none of it matches, all of it belongs",
+      "Jewel tones against warm neutrals, with one unexpected accent that resolves everything",
+      "Materials layered rather than matched  -  point of view as the organizing principle",
+      "Objects that came from somewhere: a market, a trip, a deliberate search",
+      "A room that tells the story of someone who stopped second-guessing their taste"
+    ],
+    vendors: ["Anthropologie","World Market","1stDibs","Chairish","Burke Decor"]
+  }
+};
+
+var SPACE_PHOTOS={
+  "boho":"images/img_008.jpg",
+  "industrial":"images/img_009.jpg",
+  "beachy":"images/img_010.jpg",
+  "pop":"images/img_011.jpg",
+  "minimalistic":"images/img_012.jpg",
+  "western":"images/img_013.jpg",
+  "scandinavian":"images/img_014.jpg",
+  "bauhaus":"images/img_015.jpg",
+  "jaffa":"images/img_016.jpg",
+  "eclectic":"images/img_017.jpg",
+  "default":"images/img_018.jpg"
+};
+
+// ============================================================
+// IMAGES ARRAY
+// Structure for each image entry:
+// {
+//   room:  "living" | "dining" | "bedroom" | "kids" | "office"
+//   style: "modern" | "warm" | "bold" | "classic" | "scandi"
+//   name:  "Style Name"       (shown on result screen)
+//   desc:  "Short tagline"    (shown on result screen)
+//   long_desc: "Paragraph"    (shown on result screen)
+//   img:   "BASE64_STRING"    (the image data, no prefix needed)
+// }
+//
+// HOW TO ADD IMAGES:
+// Paste each room's images as a batch below the matching comment.
+// You can add 8-12 images per room section.
+// ============================================================
+var IMGS = [
+
+  // -- LIVING ROOM -----------------------------------------
+  {room:"living", style:"beachy", img:"images/img_019.jpg"},
+  {room:"living", style:"jaffa", img:"images/img_020.jpg"},
+  {room:"living", style:"industrial", img:"images/img_021.jpg"},
+  {room:"living", style:"boho", img:"images/img_022.jpg"},
+  {room:"living", style:"western", img:"images/img_023.jpg"},
+  {room:"living", style:"scandinavian", img:"images/img_024.jpg"},
+  {room:"living", style:"minimalistic", img:"images/img_025.jpg"},
+  {room:"living", style:"bauhaus", img:"images/img_026.jpg"},
+  {room:"living", style:"pop", img:"images/img_027.jpg"},
+  {room:"living", style:"midcentury", img:"images/img_028.jpg"},
+  {room:"living", style:"boho", img:"images/img_029.jpg"},
+  {room:"living", style:"scandinavian", img:"images/img_030.jpg"},
+
+  // -- DINING ----------------------------------------------
+  {room:"dining", style:"beachy", img:"images/img_031.jpg"},
+  {room:"dining", style:"jaffa", img:"images/img_032.jpg"},
+  {room:"dining", style:"scandinavian", img:"images/img_033.jpg"},
+  {room:"dining", style:"western", img:"images/img_034.jpg"},
+  {room:"dining", style:"pastels", img:"images/img_035.jpg"},
+  {room:"dining", style:"minimalistic", img:"images/img_036.jpg"},
+  {room:"dining", style:"bauhaus", img:"images/img_037.jpg"},
+  {room:"dining", style:"pop", img:"images/img_038.jpg"},
+  {room:"dining", style:"scandinavian", img:"images/img_039.jpg"},
+  {room:"dining", style:"eclectic", img:"images/img_040.jpg"},
+  {room:"dining", style:"scandinavian", img:"images/img_041.jpg"},
+  {room:"dining", style:"midcentury", img:"images/img_042.jpg"},
+  {room:"dining", style:"midcentury", img:"images/img_043.jpg"},
+
+  // -- BEDROOMS --------------------------------------------
+  {room:"bedroom", style:"beachy", img:"images/img_044.jpg"},
+  {room:"bedroom", style:"jaffa", img:"images/img_045.jpg"},
+  {room:"bedroom", style:"industrial", img:"images/img_046.jpg"},
+  {room:"bedroom", style:"boho", img:"images/img_047.jpg"},
+  {room:"bedroom", style:"western", img:"images/img_048.jpg"},
+  {room:"bedroom", style:"scandinavian", img:"images/img_049.jpg"},
+  {room:"bedroom", style:"minimalistic", img:"images/img_050.jpg"},
+  {room:"bedroom", style:"bauhaus", img:"images/img_051.jpg"},
+  {room:"bedroom", style:"eclectic", img:"images/img_052.jpg"},
+  {room:"bedroom", style:"pop", img:"images/img_053.jpg"},
+  {room:"bedroom", style:"scandinavian", img:"images/img_054.jpg"},
+  {room:"bedroom", style:"boho", img:"images/img_055.jpg"},
+
+  // -- KIDS ROOMS ------------------------------------------
+  {room:"kids", style:"beachy", img:"images/img_056.jpg"},
+  {room:"kids", style:"jaffa", img:"images/img_057.jpg"},
+  {room:"kids", style:"industrial", img:"images/img_058.jpg"},
+  {room:"kids", style:"boho", img:"images/img_059.jpg"},
+  {room:"kids", style:"western", img:"images/img_060.jpg"},
+  {room:"kids", style:"scandinavian", img:"images/img_061.jpg"},
+  {room:"kids", style:"minimalistic", img:"images/img_062.jpg"},
+  {room:"kids", style:"bauhaus", img:"images/img_063.jpg"},
+  {room:"kids", style:"eclectic", img:"images/img_064.jpg"},
+  {room:"kids", style:"pop", img:"images/img_065.jpg"},
+  {room:"kids", style:"scandinavian", img:"images/img_066.jpg"},
+  {room:"kids", style:"boho", img:"images/img_067.jpg"},
+
+  // -- OFFICES ---------------------------------------------
+  // (no office images)
+
+];
+
+// ============================================================
+// QUIZ LOGIC
+// ============================================================
+var ans={}, scores={}, roomsChosen=[], phaseIdx=0, winStyle=null, winStyle2=null, winImg=null;
+var ROOMS=["living","dining","bedroom","kids"];
+var ROOM_LABELS={living:"Living Rooms",dining:"Dining Rooms",bedroom:"Bedrooms",kids:"Kids Rooms"};
+var ROOM_SUBS={living:"Pick the living spaces that feel like home to you",dining:"Which dining rooms feel like yours?",bedroom:"Which bedrooms speak to you?",kids:"Kids rooms and nurseries you love"};
+
+Object.keys(STYLES).forEach(function(k){scores[k]=0;});
+
+function setProgress(p){document.getElementById("prog").style.width=p+"%";}
+function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.remove("on")});document.getElementById(id).classList.add("on");window.scrollTo(0,0);}
+function go(from,to){show("s"+to);setProgress(Math.round(to/7*30));}
+
+function pick(el,s,v){
+  el.closest(".opts").querySelectorAll(".opt").forEach(function(o){o.classList.remove("on")});
+  el.classList.add("on");ans[s]=v;
+  var btn=document.getElementById("n"+s);
+  if(btn) btn.disabled=false;
+}
+
+var multiSel={};
+function toggleMulti(el,v){
+  el.classList.toggle("on");
+  if(el.classList.contains("on")){multiSel[v]=true;}else{delete multiSel[v];}
+  roomsChosen=Object.keys(multiSel);
+  document.getElementById("n7").disabled=roomsChosen.length===0;
+}
+
+function tog(el){el.classList.toggle("done");el.textContent=el.classList.contains("done")?"v":"";}
+
+function startGallery(){
+  Object.keys(scores).forEach(function(k){scores[k]=0;});
+  phaseIdx=0;buildDots();showPhase();show("sgallery");setProgress(35);
+}
+
+function buildDots(){
+  var c=document.getElementById("phaseDots");c.innerHTML="";
+  ROOMS.forEach(function(r,i){
+    var d=document.createElement("span");d.className="pdot"+(i===0?" active":"");d.id="pdot"+i;c.appendChild(d);
+  });
+}
+
+function showPhase(){
+  var room=ROOMS[phaseIdx];
+  document.getElementById("galTitle").textContent=ROOM_LABELS[room];
+  document.getElementById("galSub").textContent=ROOM_SUBS[room];
+  document.getElementById("selCount").textContent="";
+  ROOMS.forEach(function(r,i){
+    var d=document.getElementById("pdot"+i);
+    if(d) d.className="pdot"+(i<phaseIdx?" done":i===phaseIdx?" active":"");
+  });
+  var isLast=phaseIdx===ROOMS.length-1;
+  document.getElementById("galNext").textContent=isLast?"See my style ->":"Next room ->";
+  var grid=document.getElementById("galGrid");grid.innerHTML="";
+  var imgs=IMGS.filter(function(i){return i.room===room;});
+  imgs.forEach(function(im){
+    var div=document.createElement("div");div.className="gc";
+    var img=document.createElement("img");
+    if(im.img){img.src="data:image/jpeg;base64,"+im.img;}
+    else{img.style.background="#EDE5DC";}
+    img.alt="";img.loading="lazy";
+    var chk=document.createElement("div");chk.className="gc-check";chk.textContent="ok";
+    div.appendChild(img);div.appendChild(chk);
+    div.onclick=function(){
+      var on=div.classList.toggle("on");
+      scores[im.style]=(scores[im.style]||0)+(on?1:-1);
+      var sel=grid.querySelectorAll(".gc.on").length;
+      document.getElementById("selCount").textContent=sel>0?sel+" selected":"";
+      setProgress(35+Math.min(50,sel*2));
+    };
+    grid.appendChild(div);
+  });
+}
+
+function nextPhase(){
+  phaseIdx++;
+  if(phaseIdx>=ROOMS.length){showResult();}
+  else{showPhase();window.scrollTo(0,0);}
+}
+
+var ROOM_COSTS={
+  living:  {studio:[1800,3200],  "1br":[2500,4500],  "2br":[3500,6000],  "3br":[5000,8500],  "4br+":[7000,12000]},
+  dining:  {studio:[1000,2000],  "1br":[1500,2800],  "2br":[2000,4000],  "3br":[3000,5500],  "4br+":[4000,7500]},
+  bedroom: {studio:[1500,2800],  "1br":[2000,3800],  "2br":[3000,5500],  "3br":[4000,7500],  "4br+":[5500,10000]},
+  kids:    {studio:[1000,2000],  "1br":[1500,2800],  "2br":[2000,3800],  "3br":[2800,5000],  "4br+":[3500,6500]},
+  office:  {studio:[800,1800],   "1br":[1200,2500],  "2br":[1800,3500],  "3br":[2500,4500],  "4br+":[3200,6000]},
+  nursery: {studio:[900,1800],   "1br":[1300,2500],  "2br":[1800,3500],  "3br":[2500,4500],  "4br+":[3200,6000]}
+};
+var BUDGET_MULT={"10k":[0.6,0.85],"20k":[0.85,1.1],"40k":[1.1,1.4],"40k+":[1.4,1.9]};
+var ROOM_NAMES={living:"Living Room",dining:"Dining Room",bedroom:"Master Bedroom",kids:"Kids Room",office:"Home Office",nursery:"Nursery"};
+
+function calcBudget(){
+  var apt=ans[6]||"2br";
+  var mults=BUDGET_MULT[ans[4]||"20k"]||[0.85,1.1];
+  var rooms=roomsChosen.length>0?roomsChosen:["living","bedroom"];
+  var lines=[],totalLo=0,totalHi=0;
+  rooms.forEach(function(r){
+    var base=(ROOM_COSTS[r]&&ROOM_COSTS[r][apt])||[3000,6000];
+    var lo=Math.round(base[0]*mults[0]/100)*100;
+    var hi=Math.round(base[1]*mults[1]/100)*100;
+    totalLo+=lo; totalHi+=hi;
+    lines.push({room:ROOM_NAMES[r]||r,lo:lo,hi:hi});
+  });
+  return {lines:lines,totalLo:totalLo,totalHi:totalHi};
+}
+
+var COMBOS={
+  "beachy+scandinavian":"You love light, airy spaces where coastal calm meets Nordic simplicity.",
+  "beachy+boho":"You are drawn to relaxed coastal spaces with a free-spirited, layered soul.",
+  "scandinavian+minimalistic":"Your style is beautifully restrained  -  clean Scandinavian lines with true minimalist intention.",
+  "scandinavian+boho":"You love warm Scandinavian comfort with a touch of Boho personality.",
+  "boho+eclectic":"Your home is a fearless mix  -  Boho soul with an eclectic curator's eye.",
+  "industrial+minimalistic":"You love raw, honest spaces where industrial edge meets calm minimalism.",
+  "industrial+bauhaus":"Your aesthetic is bold and design-forward  -  industrial strength meets Bauhaus geometry.",
+  "midcentury+bauhaus":"You appreciate great design history  -  mid-century warmth with Bauhaus precision.",
+  "midcentury+scandinavian":"You love the timeless cool of mid-century style softened by Scandinavian warmth.",
+  "jaffa+boho":"Your home has warm Mediterranean soul with a free-spirited layered energy.",
+  "western+boho":"You are drawn to earthy grounded spaces with a free-spirited desert soul.",
+  "pop+bauhaus":"Your home is a bold statement  -  playful Pop energy meets graphic Bauhaus design.",
+  "pastels+scandinavian":"You love soft light-filled spaces  -  gentle pastels in a clean Scandinavian setting."
+};
+
+function smartDesc(s1,s2){
+  var k1=s1+"+"+s2, k2=s2+"+"+s1;
+  if(COMBOS[k1]) return COMBOS[k1];
+  if(COMBOS[k2]) return COMBOS[k2];
+  var S1=STYLES[s1],S2=STYLES[s2];
+  if(S1&&S2) return "You are drawn to "+S1.name+" spaces with "+S2.name+" touches that give your home real personality.";
+  if(S1) return S1.long_desc;
+  return "You have a beautifully personal sense of style.";
+}
+
+function showResult(){
+  var sorted=Object.keys(scores).sort(function(a,b){return scores[b]-scores[a];});
+  winStyle=sorted[0]||"scandinavian";
+  winStyle2=(scores[sorted[1]]>0)?sorted[1]:null;
+  var S=STYLES[winStyle]||STYLES[Object.keys(STYLES)[0]];
+  var styleImgs=IMGS.filter(function(i){return i.style===winStyle&&i.img;});
+  var livingImgs=styleImgs.filter(function(i){return i.room==="living";});
+  winImg=(livingImgs.length?livingImgs:styleImgs)[0]||null;
+  // Show actual space photo for the style
+  var spacePhoto=SPACE_PHOTOS[winStyle]||SPACE_PHOTOS["default"];
+  document.getElementById("resSpaceImg").src="data:image/png;base64,"+spacePhoto;
+  var headline=S.name;
+  if(winStyle2&&STYLES[winStyle2]) headline=S.name+" x "+STYLES[winStyle2].name;
+  var nameParts=headline.split(" x ");
+  if(nameParts.length>1){
+    document.getElementById("resName").innerHTML=nameParts[0]+' <strong>x '+nameParts[1]+"</strong>";
+  }else{
+    document.getElementById("resName").textContent=headline;
+  }
+  document.getElementById("resDesc").textContent=(winStyle2?smartDesc(winStyle,winStyle2):null)||S.desc;
+  // Use primary style long_desc always; smartDesc becomes a subtle sub-tagline
+  var personalDesc=S.long_desc;
+  var comboLine=winStyle2?smartDesc(winStyle,winStyle2):null;
+  var __b=S.bullets||[];var __b = S.bullets || [];
+  var __bHtml = __b.length > 0
+    ? __b.map(function(x, i) {
+        return '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;' +
+               (i < __b.length - 1 ? 'border-bottom:1px solid #F2EDE8;' : '') + '">' +
+               '<span style="width:5px;height:5px;border-radius:50%;background:#C8906A;flex-shrink:0;margin-top:8px;display:block"></span>' +
+               '<span style="font-size:13px;color:#3C3C3A;line-height:1.7;">' + x + '</span>' +
+               '</div>';
+      }).join('')
+    : '<p style="font-size:13px;color:#3C3C3A;line-height:1.8">' + personalDesc + '</p>';
+  document.getElementById("resLong").innerHTML = __bHtml;
+  var budget=calcBudget();
+  var bHTML="";budget.lines.forEach(function(l){bHTML+='<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F0ECE8">'+'<span style="font-size:12px;color:#6C6460">'+l.room+'</span>'+'<span style="font-size:12px;color:#2C2C2A">$'+l.lo.toLocaleString()+' - $'+l.hi.toLocaleString()+'</span></div>';});bHTML+='<div style="display:flex;justify-content:space-between;padding:12px 0 2px;border-top:1.5px solid #2C2C2A">'+'<span style="font-size:10px;color:#2C2C2A;letter-spacing:1.5px;text-transform:uppercase">Total estimate *</span>'+'<span style="font-size:16px;color:#C8906A;font-weight:300">$'+budget.totalLo.toLocaleString()+' - $'+budget.totalHi.toLocaleString()+'</span></div>';document.getElementById("budgetBlock").innerHTML=bHTML;
+  var vHTML=(S.vendors||[]).map(function(v){return "<span class='vendor'>"+v+"</span>";}).join("");
+  document.getElementById("vendorList").innerHTML=vHTML;
+  var loc=ans[1]||"-",timing=ans[2]||"-",who=ans[3]||"-";
+  var msg="Hi Relocate.HOME!\n\nMy home style is: "+headline+"\n\n"+personalDesc+"\n\nMoving to: "+loc+"\nArriving: "+timing+"\nWho: "+who+"\nApartment: "+(ans[6]||"-")+"\nRooms: "+roomsChosen.join(", ")+"\nBudget estimate: $"+budget.totalLo.toLocaleString()+" - $"+budget.totalHi.toLocaleString()+"\n\nI would love to book a free consultation!";
+  var waHref="https://wa.me/13327339993?text="+encodeURIComponent(msg);
+  document.getElementById("waFloat").href=waHref;
+  document.getElementById("waBtn").href=waHref;
+  var urg=timing==="Within 1 month",baby=who==="Family with baby",kids=who.indexOf("kids")>-1||baby;
+  // Website-style outline icons  -  line-art, no fill
+  var TL_ICONS={
+    listen:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="9"/><path d="M23 23 L34 34"/><circle cx="16" cy="16" r="4"/></svg>',
+    design:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="6" width="28" height="32" rx="2"/><line x1="8" y1="14" x2="36" y2="14"/><line x1="14" y1="6" x2="14" y2="14"/><line x1="22" y1="6" x2="22" y2="14"/><line x1="30" y1="6" x2="30" y2="14"/><line x1="14" y1="21" x2="30" y2="21"/><line x1="14" y1="27" x2="26" y2="27"/><line x1="14" y1="33" x2="22" y2="33"/></svg>',
+    collab:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 20 C15 20 17 17 22 17 C27 17 29 20 29 20"/><path d="M12 28 L15 20 L29 20 L32 28 Z"/><line x1="18" y1="20" x2="18" y2="28"/><line x1="22" y1="20" x2="22" y2="28"/><line x1="26" y1="20" x2="26" y2="28"/><line x1="22" y1="10" x2="22" y2="17"/><circle cx="22" cy="8" r="3"/></svg>',
+    care:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 36 C22 36 8 28 8 18 C8 13 12 10 16 10 C19 10 22 12 22 12 C22 12 25 10 28 10 C32 10 36 13 36 18 C36 28 22 36 22 36Z"/></svg>',
+    pack:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="18" width="12" height="18" rx="1.5"/><rect x="24" y="10" width="12" height="26" rx="1.5"/><line x1="8" y1="24" x2="20" y2="24"/><line x1="24" y1="16" x2="36" y2="16"/><path d="M11 18 C11 14 13 12 14 12 C15 12 15 14 15 18"/><path d="M27 10 C27 6 30 5 31 5 C32 5 33 7 33 10"/></svg>',
+    home:'<svg viewBox="0 0 44 44" fill="none" stroke="#2C2C2A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22 L22 8 L38 22"/><rect x="10" y="22" width="24" height="16" rx="1"/><rect x="17" y="28" width="7" height="10" rx="1"/><rect x="10" y="25" width="5" height="5" rx="0.5"/><rect x="29" y="25" width="5" height="5" rx="0.5"/></svg>'
+  };
+
+  
+
+  
+
+  show("sresult");setProgress(100);
+}
+
+
+
+
+
+function shareResult(){
+  var headline=document.getElementById("resName").textContent;
+  var text="My home style is "+headline+"! Find yours at relocate-home.com";
+  if(navigator.share){navigator.share({title:"My style: "+headline,text:text,url:"https://relocate-home.com"});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){alert("Copied! Paste to share.");});}
+  else{alert(text);}
+}
+
+function retry(){
+  ans={};Object.keys(scores).forEach(function(k){scores[k]=0;});
+  multiSel={};roomsChosen=[];winStyle=null;winStyle2=null;winImg=null;phaseIdx=0;
+  show("s1");setProgress(5);
+}
+</script>
+
+<div style="background:#F0EDE8;padding:2rem 1.2rem;margin-top:0;text-align:center">
+  <div style="max-width:500px;margin:0 auto">
+    <div style="font-size:9px;letter-spacing:3px;color:#A89E94;text-transform:uppercase;margin-bottom:10px">DISCLAIMER</div>
+    <p style="font-size:10px;color:#A89E94;letter-spacing:.3px;line-height:1.9;margin:0">
+      This quiz is intended for inspiration and planning guidance only. Style results, budget estimates, and timelines are based on your selections and typical mid-market NYC pricing (2025). Actual costs vary based on product availability, delivery schedules, apartment specifications, and market conditions. Relocate.HOME is not responsible for decisions made based solely on quiz results. For a precise quote and personalised plan, please book a free consultation.
+    </p>
+    <div style="margin-top:1rem;font-size:9px;color:#C8906A;letter-spacing:2px">
+      &copy; 2025 RELOCATE.HOME &nbsp;&middot;&nbsp;
+      <a href="https://www.relocate-home.com" style="color:#C8906A;text-decoration:none">RELOCATE-HOME.COM</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
